@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 · Lesson 1 · Exercise 2 — Russian Translation</title>
+<style>
+  :root {
+    --terracotta: #8B4A3B;
+    --terracotta-dark: #6B3629;
+    --charcoal: #2F3C3C;
+    --brass: #B5892B;
+    --card-bg: #EFF1EE;
+    --muted: #6B6862;
+    --success: #2E7D5B;
+    --danger: #B5423A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #FFFFFF;
+    color: var(--charcoal);
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    line-height: 1.6;
+  }
+  .kicker {
+    color: var(--brass);
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.9rem;
+    margin: 0 0 0.75rem;
+    color: var(--charcoal);
+  }
+  .instructions {
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 2rem;
+  }
+  @media (min-width: 620px) {
+    .grid { grid-template-columns: 1fr 1fr; }
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .card .term {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .card .letter {
+    color: var(--terracotta-dark);
+  }
+  .card input {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 1.5px solid #C9C4BC;
+    border-radius: 6px;
+    font-family: inherit;
+  }
+  .card input:focus {
+    outline: none;
+    border-color: var(--terracotta);
+  }
+  .card input.correct { border-color: var(--success); background: #EAF5EF; }
+  .card input.incorrect { border-color: var(--danger); background: #FBEEEC; }
+  .mark { font-weight: bold; margin-left: 8px; }
+  .mark.ok { color: var(--success); }
+  .mark.no { color: var(--danger); }
+  .hint {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 6px;
+    display: none;
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  button {
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover { background: var(--terracotta-dark); }
+  button.secondary {
+    background: transparent;
+    color: var(--terracotta-dark);
+    border: 1.5px solid var(--terracotta-dark);
+  }
+  button.secondary:hover { background: #F5EDEB; }
+  #score {
+    font-weight: bold;
+    color: var(--charcoal);
+  }
+  footer {
+    margin-top: 3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="kicker">MODULE 1 &middot; LESSON 1 &middot; EXERCISE 2</div>
+<h1>Exercise 2 — Write Russian translation</h1>
+<p class="instructions">Write the Russian translation for each English term. If you're not sure, type your best guess &mdash; you'll see the accepted answer after checking.</p>
+
+<div class="grid" id="items"></div>
+
+<div class="controls">
+  <button id="checkBtn">Check answers</button>
+  <button id="resetBtn" class="secondary">Reset</button>
+  <span id="score"></span>
+</div>
+
+<footer>English for Architects &amp; Designers &middot; Module 1 &middot; Lesson 1 &middot; Materials &amp; Textures</footer>
+
+<script>
+const data = [
+  ["A", "herringbone parquet", ["паркет ёлочкой", "паркет в елочку", "паркет в ёлочку", "паркет елочкой", "елочка"]],
+  ["B", "reclaimed timber", ["вторичная древесина", "вторичный лес", "переработанная древесина"]],
+  ["C", "honed limestone", ["матированный известняк"]],
+  ["D", "fluted glass", ["рифленое стекло", "рифлёное стекло"]],
+  ["E", "unlacquered brass", ["нелакированная латунь"]],
+  ["F", "board-formed concrete", ["бетон с фактурой опалубки"]],
+  ["G", "satin finish", ["сатиновая отделка", "сатиновый"]],
+  ["H", "zellige tiles", ["зелидж", "плитка зелидж", "плитка \u00abзелидж\u00bb"]]
+];
+
+function normalize(s) {
+  return s.trim().toLowerCase().replace(/\u0451/g, '\u0435').replace(/[«»"']/g, '');
+}
+
+const wrap = document.getElementById('items');
+data.forEach((row, i) => {
+  const [letter, term, answers] = row;
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.innerHTML =
+    '<div class="term"><span class="letter">' + letter + '.</span> ' + term + '</div>' +
+    '<input type="text" data-i="' + i + '" placeholder="\u043d\u0430\u043f\u0438\u0448\u0438\u0442\u0435 \u043f\u0435\u0440\u0435\u0432\u043e\u0434" autocomplete="off">' +
+    '<span class="mark ok" data-ok="' + i + '" style="display:none">\u2713</span>' +
+    '<span class="mark no" data-no="' + i + '" style="display:none">\u2717</span>' +
+    '<div class="hint" data-hint="' + i + '">Accepted: ' + answers[0] + '</div>';
+  wrap.appendChild(div);
+});
+
+document.getElementById('checkBtn').addEventListener('click', () => {
+  let correct = 0;
+  data.forEach((row, i) => {
+    const [letter, term, answers] = row;
+    const input = document.querySelector('input[data-i="' + i + '"]');
+    const val = normalize(input.value);
+    const ok = answers.some(a => normalize(a) === val);
+    input.classList.remove('correct', 'incorrect');
+    input.classList.add(ok ? 'correct' : 'incorrect');
+    document.querySelector('[data-ok="' + i + '"]').style.display = ok ? 'inline' : 'none';
+    document.querySelector('[data-no="' + i + '"]').style.display = ok ? 'none' : 'inline';
+    document.querySelector('[data-hint="' + i + '"]').style.display = ok ? 'none' : 'block';
+    if (ok) correct++;
+  });
+  document.getElementById('score').textContent = correct + ' / 8 correct';
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.querySelectorAll('input').forEach(inp => {
+    inp.value = '';
+    inp.classList.remove('correct', 'incorrect');
+  });
+  document.querySelectorAll('.mark').forEach(m => m.style.display = 'none');
+  document.querySelectorAll('.hint').forEach(h => h.style.display = 'none');
+  document.getElementById('score').textContent = '';
+});
+</script>
+
+</body>
+</html>
