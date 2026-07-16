@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 · Lesson 1 · Exercise 1 — Gap Fill</title>
+<style>
+  :root {
+    --terracotta: #8B4A3B;
+    --terracotta-dark: #6B3629;
+    --charcoal: #2F3C3C;
+    --brass: #B5892B;
+    --card-bg: #EFF1EE;
+    --muted: #6B6862;
+    --success: #2E7D5B;
+    --danger: #B5423A;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #FFFFFF;
+    color: var(--charcoal);
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem;
+    line-height: 1.6;
+  }
+  .kicker {
+    color: var(--brass);
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+  }
+  h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 1.9rem;
+    margin: 0 0 0.75rem;
+    color: var(--charcoal);
+  }
+  .instructions {
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+  }
+  .wordbank {
+    background: #E4EFEC;
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--terracotta-dark);
+    margin-bottom: 2rem;
+    letter-spacing: 0.3px;
+  }
+  .item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    padding: 12px 0;
+    border-bottom: 1px solid #E0DED8;
+    font-size: 1rem;
+  }
+  .item .num {
+    color: var(--muted);
+    min-width: 22px;
+  }
+  .item input {
+    width: 190px;
+    padding: 6px 10px;
+    font-size: 1rem;
+    border: 1.5px solid #C9C4BC;
+    border-radius: 6px;
+    font-family: inherit;
+  }
+  .item input:focus {
+    outline: none;
+    border-color: var(--terracotta);
+  }
+  .item input.correct { border-color: var(--success); background: #EAF5EF; }
+  .item input.incorrect { border-color: var(--danger); background: #FBEEEC; }
+  .mark { font-weight: bold; font-size: 1.1rem; }
+  .mark.ok { color: var(--success); }
+  .mark.no { color: var(--danger); }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 2rem;
+  }
+  button {
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover { background: var(--terracotta-dark); }
+  button.secondary {
+    background: transparent;
+    color: var(--terracotta-dark);
+    border: 1.5px solid var(--terracotta-dark);
+  }
+  button.secondary:hover { background: #F5EDEB; }
+  #score {
+    font-weight: bold;
+    color: var(--charcoal);
+  }
+  footer {
+    margin-top: 3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="kicker">MODULE 1 &middot; LESSON 1 &middot; EXERCISE 1</div>
+<h1>Exercise 1 — Gap fill</h1>
+<p class="instructions">Complete each sentence with the correct term from the box. Use each word once. Type your answer and press "Check answers" when you're done.</p>
+
+<div class="wordbank">
+brass &middot; reclaimed &middot; herringbone &middot; honed &middot; lime plaster &middot; fluted &middot; zellige &middot; terrazzo &middot; cladding &middot; board-formed concrete
+</div>
+
+<div id="items"></div>
+
+<div class="controls">
+  <button id="checkBtn">Check answers</button>
+  <button id="resetBtn" class="secondary">Reset</button>
+  <span id="score"></span>
+</div>
+
+<footer>English for Architects &amp; Designers · Module 1 · Lesson 1 · Materials &amp; Textures</footer>
+
+<script>
+const data = [
+  ["The kitchen floor is laid in a", "pattern using solid oak boards.", "herringbone"],
+  ["We specified", "limestone for the bathroom \u2014 polished would have shown every water mark.", "honed"],
+  ["The external", "is corten steel, which will develop a rust-orange surface over time.", "cladding"],
+  ["The walls are finished in", ", which is breathable and develops a subtle texture as it cures.", "lime plaster"],
+  ["The kitchen fittings are made from unlacquered", ", so they will slowly change colour with use.", "brass"],
+  ["The glass partition uses", "panels that divide the space while still allowing light through.", "fluted"],
+  ["We sourced", "bricks to match the existing Victorian brickwork on the facade.", "reclaimed"],
+  ["The countertop is made from", ", a stone-chip composite that's durable and easy to maintain.", "terrazzo"],
+  ["One wall in the bathroom is clad in", "tiles \u2014 their slightly irregular, hand-glazed surface adds a touch of craft to the room.", "zellige"],
+  ["The ceiling was left as", ", so you can see the timber grain from the formwork in the surface.", "board-formed concrete"]
+];
+
+const wrap = document.getElementById('items');
+data.forEach((row, i) => {
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML =
+    '<span class="num">' + (i + 1) + '.</span>' +
+    '<span>' + row[0] + '</span>' +
+    '<input type="text" data-i="' + i + '" placeholder="type here" autocomplete="off">' +
+    '<span>' + row[1] + '</span>' +
+    '<span class="mark ok" data-ok="' + i + '" style="display:none">\u2713</span>' +
+    '<span class="mark no" data-no="' + i + '" style="display:none">\u2717</span>';
+  wrap.appendChild(div);
+});
+
+document.getElementById('checkBtn').addEventListener('click', () => {
+  let correct = 0;
+  data.forEach((row, i) => {
+    const input = document.querySelector('input[data-i="' + i + '"]');
+    const val = input.value.trim().toLowerCase();
+    const ok = val === row[2].toLowerCase();
+    input.classList.remove('correct', 'incorrect');
+    input.classList.add(ok ? 'correct' : 'incorrect');
+    document.querySelector('[data-ok="' + i + '"]').style.display = ok ? 'inline' : 'none';
+    document.querySelector('[data-no="' + i + '"]').style.display = ok ? 'none' : 'inline';
+    if (ok) correct++;
+  });
+  document.getElementById('score').textContent = correct + ' / 10 correct';
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.querySelectorAll('input').forEach(inp => {
+    inp.value = '';
+    inp.classList.remove('correct', 'incorrect');
+  });
+  document.querySelectorAll('.mark').forEach(m => m.style.display = 'none');
+  document.getElementById('score').textContent = '';
+});
+</script>
+
+</body>
+</html>
