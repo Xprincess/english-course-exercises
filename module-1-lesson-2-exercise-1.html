@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 · Lesson 2 · Exercise 1 — Gap Fill</title>
+<style>
+  :root {
+    --charcoal: #36454F;
+    --charcoal-dark: #222B31;
+    --paper: #FFFFFF;
+    --offwhite: #F2F2F2;
+    --clay: #C1502E;
+    --sage: #8FA998;
+    --muted: #6B7280;
+    --line: #D9D9D5;
+    --correct: #4B7A5A;
+    --correct-bg: #EAF3EC;
+    --incorrect: #B23A3A;
+    --incorrect-bg: #FBEAEA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Calibri, Arial, sans-serif;
+    background: var(--offwhite);
+    color: #1A1A1A;
+  }
+  header {
+    background: var(--charcoal-dark);
+    color: var(--paper);
+    padding: 2.2rem 1.5rem 1.8rem;
+    text-align: left;
+  }
+  header .kicker {
+    color: var(--clay);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  header h1 {
+    font-family: Cambria, Georgia, serif;
+    font-size: 1.9rem;
+    margin: 0 0 0.35rem;
+  }
+  header p {
+    color: var(--sage);
+    font-style: italic;
+    margin: 0;
+    font-size: 0.98rem;
+  }
+  .wordbank {
+    max-width: 1000px;
+    margin: -1.1rem auto 0;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .wordbank-inner {
+    background: var(--charcoal);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+  .wordbank-label {
+    color: var(--clay);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .word-chip {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    margin: 0.12rem 0.15rem;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    font-size: 0.86rem;
+  }
+  .word-chip.used {
+    opacity: 0.35;
+    text-decoration: line-through;
+  }
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem;
+  }
+  @media (max-width: 700px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+  .item {
+    background: var(--paper);
+    border-left: 4px solid var(--clay);
+    border-radius: 4px;
+    padding: 0.85rem 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .item .num {
+    color: var(--clay);
+    font-weight: 700;
+    font-family: Cambria, Georgia, serif;
+    margin-right: 0.3rem;
+  }
+  .item .sentence {
+    font-size: 0.96rem;
+    line-height: 1.5;
+    color: #1A1A1A;
+  }
+  .blank-input {
+    border: none;
+    border-bottom: 2px solid var(--muted);
+    background: transparent;
+    font-size: 0.96rem;
+    font-family: inherit;
+    padding: 1px 3px;
+    width: 150px;
+    text-align: center;
+    color: var(--charcoal);
+    font-weight: 600;
+  }
+  .blank-input:focus {
+    outline: none;
+    border-bottom-color: var(--clay);
+  }
+  .item.correct { background: var(--correct-bg); border-left-color: var(--correct); }
+  .item.correct .blank-input { border-bottom-color: var(--correct); color: var(--correct); }
+  .item.incorrect { background: var(--incorrect-bg); border-left-color: var(--incorrect); }
+  .item.incorrect .blank-input { border-bottom-color: var(--incorrect); color: var(--incorrect); }
+  .item .answer-reveal {
+    display: none;
+    font-size: 0.82rem;
+    color: var(--incorrect);
+    margin-top: 0.25rem;
+    font-style: italic;
+  }
+  .item.incorrect .answer-reveal { display: block; }
+
+  .controls {
+    position: sticky;
+    bottom: 0;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 1000px;
+    margin: 1.5rem auto 0;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .score {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    font-family: Cambria, Georgia, serif;
+  }
+  .score span { color: var(--clay); }
+  button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.65rem 1.4rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.08s ease;
+  }
+  button:active { transform: scale(0.97); }
+  .btn-check {
+    background: var(--clay);
+    color: var(--paper);
+  }
+  .btn-check:hover { background: #A9432A; }
+  .btn-reset {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  .btn-reset:hover { border-color: var(--muted); color: var(--charcoal); }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Module 1 &middot; Lesson 2 &middot; Exercise 1</div>
+  <h1>Gap Fill — Spatial Language</h1>
+  <p>Type the correct word or phrase in each blank, then press Check Answers.</p>
+</header>
+
+<div class="wordbank">
+  <div class="wordbank-inner">
+    <span class="wordbank-label">Word Bank</span>
+    <div id="wordbank-chips"></div>
+  </div>
+</div>
+
+<main>
+  <div class="grid" id="exercise-grid"></div>
+
+  <div class="controls">
+    <div class="score">Score: <span id="score-display">0 / 20</span></div>
+    <div style="display:flex; gap:0.6rem;">
+      <button class="btn-reset" onclick="resetExercise()">Reset</button>
+      <button class="btn-check" onclick="checkAnswers()">Check Answers</button>
+    </div>
+  </div>
+</main>
+
+<footer>Module 1 · Lesson 2 — Spatial Language &amp; Describing Volumes</footer>
+
+<script>
+const items = [
+  { s: "The living room is a", b: "double-height", e: "space, rising through both floors of the house." },
+  { s: "A", b: "void", e: "separates the two wings of the house while still connecting them." },
+  { s: "Extending sideways rather than upwards keeps the", b: "footprint", e: "small." },
+  { s: "Floor-to-ceiling", b: "glazing", e: "lets the garden spill into the kitchen." },
+  { s: "Slim steel", b: "columns", e: "hold up the roof without blocking the view." },
+  { s: "Regular openings", b: "punctuate", e: "the brick fa\u00e7ade at intervals." },
+  { s: "A change in floor material marks the", b: "transition", e: "from hallway to kitchen." },
+  { s: "A", b: "skylight", e: "above the stairwell pulls light down into the basement." },
+  { s: "A small", b: "mezzanine", e: "was added above the workshop for extra storage." },
+  { s: "Visitors are greeted by a glass-roofed", b: "atrium", e: "at the entrance." },
+  { s: "Stepping over the", b: "threshold", e: "you move from the noisy street into total quiet." },
+  { s: "Good", b: "circulation", e: "means guests never have to walk back through the kitchen." },
+  { s: "Removing the wall opened up a", b: "sightline", e: "straight through to the garden." },
+  { s: "Bedrooms wrap around a quiet", b: "courtyard", e: "planted with olive trees." },
+  { s: "The upper floor sits on a", b: "cantilever", e: "jutting out over the garden below." },
+  { s: "A steel beam allows the roof to", b: "span", e: "the full width of the room." },
+  { s: "The architect broke up the building's", b: "massing", e: "into smaller, stepped volumes." },
+  { s: "Insulating the", b: "envelope", e: "properly cuts heating costs significantly." },
+  { s: "Rather than building up, they added a", b: "lateral extension", e: "across the side garden." },
+  { s: "The", b: "rear extension", e: "pushed the kitchen two metres into the garden." },
+];
+
+const wordBank = [...new Set(items.map(i => i.b))].sort();
+
+function init() {
+  const chipsEl = document.getElementById('wordbank-chips');
+  chipsEl.innerHTML = wordBank.map(w => `<span class="word-chip" id="chip-${slug(w)}">${w}</span>`).join('');
+
+  const grid = document.getElementById('exercise-grid');
+  grid.innerHTML = items.map((item, i) => `
+    <div class="item" id="item-${i}">
+      <span class="num">${i + 1}.</span>
+      <span class="sentence">${item.s}
+        <input type="text" class="blank-input" id="input-${i}" autocomplete="off" oninput="updateChips()">
+        ${item.e}</span>
+      <div class="answer-reveal">Answer: ${item.b}</div>
+    </div>
+  `).join('');
+}
+
+function slug(w) {
+  return w.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+}
+
+function updateChips() {
+  wordBank.forEach(w => {
+    const chip = document.getElementById(`chip-${slug(w)}`);
+    const used = items.some((item, i) => {
+      const val = document.getElementById(`input-${i}`).value.trim().toLowerCase();
+      return item.b.toLowerCase() === w.toLowerCase() && val === w.toLowerCase();
+    });
+    chip.classList.toggle('used', used);
+  });
+}
+
+function checkAnswers() {
+  let correct = 0;
+  items.forEach((item, i) => {
+    const input = document.getElementById(`input-${i}`);
+    const el = document.getElementById(`item-${i}`);
+    const val = input.value.trim().toLowerCase();
+    el.classList.remove('correct', 'incorrect');
+    if (val === item.b.toLowerCase()) {
+      el.classList.add('correct');
+      correct++;
+    } else if (val.length > 0) {
+      el.classList.add('incorrect');
+    } else {
+      el.classList.add('incorrect');
+    }
+  });
+  document.getElementById('score-display').textContent = `${correct} / ${items.length}`;
+}
+
+function resetExercise() {
+  items.forEach((item, i) => {
+    document.getElementById(`input-${i}`).value = '';
+    document.getElementById(`item-${i}`).classList.remove('correct', 'incorrect');
+  });
+  document.getElementById('score-display').textContent = `0 / ${items.length}`;
+}
+
+init();
+</script>
+
+</body>
+</html>
