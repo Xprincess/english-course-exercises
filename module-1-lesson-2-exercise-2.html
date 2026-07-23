@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 · Lesson 2 · Exercise 2 — Match the Term</title>
+<style>
+  :root {
+    --charcoal: #36454F;
+    --charcoal-dark: #222B31;
+    --paper: #FFFFFF;
+    --offwhite: #F2F2F2;
+    --clay: #C1502E;
+    --sage: #8FA998;
+    --muted: #6B7280;
+    --line: #D9D9D5;
+    --correct: #4B7A5A;
+    --correct-bg: #EAF3EC;
+    --incorrect: #B23A3A;
+    --incorrect-bg: #FBEAEA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Calibri, Arial, sans-serif;
+    background: var(--offwhite);
+    color: #1A1A1A;
+  }
+  header {
+    background: var(--charcoal-dark);
+    color: var(--paper);
+    padding: 2.2rem 1.5rem 1.8rem;
+  }
+  header .kicker {
+    color: var(--clay);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  header h1 {
+    font-family: Cambria, Georgia, serif;
+    font-size: 1.9rem;
+    margin: 0 0 0.35rem;
+  }
+  header p {
+    color: var(--sage);
+    font-style: italic;
+    margin: 0;
+    font-size: 0.98rem;
+  }
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  @media (max-width: 750px) {
+    .columns { grid-template-columns: 1fr; }
+  }
+  .col-label {
+    font-family: Cambria, Georgia, serif;
+    font-weight: 700;
+    color: var(--charcoal);
+    font-size: 0.95rem;
+    margin-bottom: 0.7rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--clay);
+  }
+  .term-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--paper);
+    border-left: 4px solid var(--clay);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.55rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .term-row.correct { background: var(--correct-bg); border-left-color: var(--correct); }
+  .term-row.incorrect { background: var(--incorrect-bg); border-left-color: var(--incorrect); }
+  .term-num {
+    font-family: Cambria, Georgia, serif;
+    font-weight: 700;
+    color: var(--clay);
+    min-width: 1.1rem;
+  }
+  .term-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--charcoal);
+    font-size: 0.98rem;
+  }
+  .letter-input {
+    width: 46px;
+    text-align: center;
+    border: none;
+    border-bottom: 2px solid var(--muted);
+    background: transparent;
+    font-family: Cambria, Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    padding: 2px;
+    text-transform: lowercase;
+  }
+  .letter-input:focus { outline: none; border-bottom-color: var(--clay); }
+  .term-row.correct .letter-input { border-bottom-color: var(--correct); color: var(--correct); }
+  .term-row.incorrect .letter-input { border-bottom-color: var(--incorrect); color: var(--incorrect); }
+  .answer-reveal {
+    display: none;
+    font-size: 0.78rem;
+    color: var(--incorrect);
+    font-style: italic;
+    margin-top: -0.3rem;
+    margin-bottom: 0.55rem;
+    margin-left: 2.3rem;
+  }
+  .term-row.incorrect + .answer-reveal { display: block; }
+
+  .def-row {
+    display: flex;
+    gap: 0.6rem;
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 0.55rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .def-letter {
+    font-family: Cambria, Georgia, serif;
+    font-weight: 700;
+    color: var(--sage);
+    min-width: 1.2rem;
+  }
+  .def-text {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: #1A1A1A;
+  }
+
+  .controls {
+    position: sticky;
+    bottom: 0;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 980px;
+    margin: 1.5rem auto 0;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .score {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    font-family: Cambria, Georgia, serif;
+  }
+  .score span { color: var(--clay); }
+  button {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.65rem 1.4rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.08s ease;
+  }
+  button:active { transform: scale(0.97); }
+  .btn-check { background: var(--clay); color: var(--paper); }
+  .btn-check:hover { background: #A9432A; }
+  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .btn-reset:hover { border-color: var(--muted); color: var(--charcoal); }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Module 1 &middot; Lesson 2 &middot; Exercise 2</div>
+  <h1>Match the Term</h1>
+  <p>Type the letter (a–h) of the matching definition next to each term, then press Check Answers.</p>
+</header>
+
+<main>
+  <div class="columns">
+    <div>
+      <div class="col-label">Terms</div>
+      <div id="terms-list"></div>
+    </div>
+    <div>
+      <div class="col-label">Definitions</div>
+      <div id="defs-list"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="score">Score: <span id="score-display">0 / 8</span></div>
+    <div style="display:flex; gap:0.6rem;">
+      <button class="btn-reset" onclick="resetExercise()">Reset</button>
+      <button class="btn-check" onclick="checkAnswers()">Check Answers</button>
+    </div>
+  </div>
+</main>
+
+<footer>Module 1 · Lesson 2 — Spatial Language &amp; Describing Volumes</footer>
+
+<script>
+const terms = [
+  { term: "double-height", answer: "f" },
+  { term: "atrium", answer: "d" },
+  { term: "footprint", answer: "e" },
+  { term: "envelope", answer: "g" },
+  { term: "threshold", answer: "b" },
+  { term: "skylight", answer: "c" },
+  { term: "span", answer: "h" },
+  { term: "courtyard", answer: "a" },
+];
+
+const definitions = [
+  { letter: "a", text: "An open-air space enclosed by a building on some or all sides." },
+  { letter: "b", text: "The point of transition between one space and another." },
+  { letter: "c", text: "A window set into a roof to bring light from above." },
+  { letter: "d", text: "A large, often multi-storey, top-lit open space at a building's centre." },
+  { letter: "e", text: "The total ground area a building covers." },
+  { letter: "f", text: "A room or void rising through two storeys, with no upper floor." },
+  { letter: "g", text: "The outer shell of a building — walls and roof." },
+  { letter: "h", text: "The horizontal distance a structural element crosses unsupported." },
+];
+
+function init() {
+  const termsList = document.getElementById('terms-list');
+  termsList.innerHTML = terms.map((t, i) => `
+    <div class="term-row" id="term-${i}">
+      <span class="term-num">${i + 1}.</span>
+      <span class="term-name">${t.term}</span>
+      <input type="text" maxlength="1" class="letter-input" id="letter-input-${i}" autocomplete="off">
+    </div>
+    <div class="answer-reveal" id="reveal-${i}">Answer: ${t.answer}</div>
+  `).join('');
+
+  const defsList = document.getElementById('defs-list');
+  defsList.innerHTML = definitions.map(d => `
+    <div class="def-row">
+      <span class="def-letter">${d.letter}.</span>
+      <span class="def-text">${d.text}</span>
+    </div>
+  `).join('');
+}
+
+function checkAnswers() {
+  let correct = 0;
+  terms.forEach((t, i) => {
+    const input = document.getElementById(`letter-input-${i}`);
+    const row = document.getElementById(`term-${i}`);
+    const val = input.value.trim().toLowerCase();
+    row.classList.remove('correct', 'incorrect');
+    if (val === t.answer) {
+      row.classList.add('correct');
+      correct++;
+    } else {
+      row.classList.add('incorrect');
+    }
+  });
+  document.getElementById('score-display').textContent = `${correct} / ${terms.length}`;
+}
+
+function resetExercise() {
+  terms.forEach((t, i) => {
+    document.getElementById(`letter-input-${i}`).value = '';
+    document.getElementById(`term-${i}`).classList.remove('correct', 'incorrect');
+  });
+  document.getElementById('score-display').textContent = `0 / ${terms.length}`;
+}
+
+init();
+</script>
+
+</body>
+</html>
