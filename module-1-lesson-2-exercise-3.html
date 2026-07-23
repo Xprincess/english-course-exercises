@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 · Lesson 2 · Exercise 3 — Flashcards</title>
+<style>
+  :root {
+    --charcoal: #36454F;
+    --charcoal-dark: #222B31;
+    --paper: #FFFFFF;
+    --offwhite: #F2F2F2;
+    --clay: #C1502E;
+    --sage: #8FA998;
+    --muted: #6B7280;
+    --line: #D9D9D5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Calibri, Arial, sans-serif;
+    background: var(--offwhite);
+    color: #1A1A1A;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    background: var(--charcoal-dark);
+    color: var(--paper);
+    padding: 2.2rem 1.5rem 1.6rem;
+    text-align: center;
+  }
+  header .kicker {
+    color: var(--clay);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  header h1 {
+    font-family: Cambria, Georgia, serif;
+    font-size: 1.9rem;
+    margin: 0 0 0.35rem;
+  }
+  header p {
+    color: var(--sage);
+    font-style: italic;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 1.2rem 1rem 0;
+  }
+  .filter-btn {
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--line);
+    background: var(--paper);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-btn:hover { border-color: var(--clay); color: var(--clay); }
+  .filter-btn.active {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--paper);
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .progress {
+    font-family: Cambria, Georgia, serif;
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 1.1rem;
+  }
+  .progress span { color: var(--clay); font-weight: 700; }
+
+  .card-scene {
+    width: 100%;
+    max-width: 560px;
+    height: 320px;
+    perspective: 1400px;
+    cursor: pointer;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  .card-front {
+    background: var(--charcoal);
+    color: var(--paper);
+  }
+  .card-front .category-tag {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--clay);
+  }
+  .card-front .word {
+    font-family: Cambria, Georgia, serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .card-front .flip-hint {
+    position: absolute;
+    bottom: 1.2rem;
+    font-size: 0.78rem;
+    color: var(--sage);
+    font-style: italic;
+  }
+  .card-back {
+    background: var(--paper);
+    border: 2px solid var(--clay);
+    transform: rotateY(180deg);
+  }
+  .card-back .russian {
+    font-family: Cambria, Georgia, serif;
+    font-style: italic;
+    font-size: 1.3rem;
+    color: var(--clay);
+    font-weight: 700;
+    margin-bottom: 0.9rem;
+  }
+  .card-back .explanation {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1A1A1A;
+  }
+  .card-back .source-tag {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.8rem;
+  }
+  button.nav-btn {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.65rem 1.3rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.08s ease;
+    background: var(--paper);
+    color: var(--charcoal);
+    border: 1.5px solid var(--line);
+  }
+  button.nav-btn:hover { border-color: var(--charcoal); }
+  button.nav-btn:active { transform: scale(0.96); }
+  button.nav-btn.primary {
+    background: var(--clay);
+    color: var(--paper);
+    border-color: var(--clay);
+  }
+  button.nav-btn.primary:hover { background: #A9432A; }
+  button.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-size: 1.3rem;
+    padding: 0.3rem 0.6rem;
+    transition: color 0.15s ease;
+  }
+  button.icon-btn:hover { color: var(--clay); }
+
+  .hint {
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 500px) {
+    .card-scene { height: 280px; }
+    .card-front .word { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Module 1 · Lesson 2 · Exercise 3</div>
+  <h1>Flashcards — Spatial Vocabulary</h1>
+  <p>Click the card to flip it. Word on the front, explanation + Russian on the back.</p>
+</header>
+
+<div class="filters" id="filters"></div>
+
+<main>
+  <div class="progress">Card <span id="progress-current">1</span> / <span id="progress-total">30</span> &nbsp;&middot;&nbsp; <span id="progress-category">All</span></div>
+
+  <div class="card-scene" id="card-scene">
+    <div class="card" id="card">
+      <div class="card-face card-front">
+        <div class="category-tag" id="cat-tag">Category</div>
+        <div class="word" id="word-text">word</div>
+        <div class="flip-hint">click to flip \u2194</div>
+      </div>
+      <div class="card-face card-back">
+        <div class="russian" id="russian-text">перевод</div>
+        <div class="explanation" id="explanation-text">explanation</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="icon-btn" id="shuffle-btn" title="Shuffle">&#128256;</button>
+    <button class="nav-btn" id="prev-btn">&larr; Prev</button>
+    <button class="nav-btn primary" id="next-btn">Next &rarr;</button>
+  </div>
+
+  <div class="hint">Tip: use the arrow keys to move between cards, and space or enter to flip.</div>
+</main>
+
+<footer>Module 1 · Lesson 2 — Spatial Language &amp; Describing Volumes</footer>
+
+<script>
+const deck = [
+  // Phrases from the Texts — Text A
+  { cat: "Phrases · Text A", word: "a sunken portion of (the garden)", ru: "заглублённая часть (сада)", en: "\u201Cadding a full-width, double-height extension set into a sunken portion of the back garden\u201D" },
+  { cat: "Phrases · Text A", word: "an open vertical void", ru: "открытая вертикальная пустота", en: "\u201Cconnects three areas of the home around an open vertical void\u201D" },
+  { cat: "Phrases · Text A", word: "bespoke (wooden bath)", ru: "изготовленный на заказ", en: "\u201Ca bespoke wooden bath in a stone-lined en-suite\u201D" },
+
+  // Phrases from the Texts — Text B
+  { cat: "Phrases · Text B", word: "a lateral extension", ru: "боковая пристройка", en: "\u201CGoldstein Heather's four-storey lateral extension nearly doubles the footprint...\u201D" },
+  { cat: "Phrases · Text B", word: "a pendant light", ru: "подвесной светильник", en: "\u201Ca large pendant light hangs at its centre\u201D" },
+  { cat: "Phrases · Text B", word: "semi-circular clerestory lights", ru: "полукруглые окна верхнего света", en: "\u201CSemi-circular clerestory lights punctuate the walls near the roofline\u201D" },
+  { cat: "Phrases · Text B", word: "a sequence of wide, rounded arches", ru: "ряд широких закруглённых арок", en: "\u201CA sequence of wide, rounded arches — supported on solid columns\u201D" },
+
+  // Phrases from the Texts — Text C
+  { cat: "Phrases · Text C", word: "charred timber", ru: "обожжённая древесина", en: "\u201Ca rear extension clad in charred timber\u201D" },
+  { cat: "Phrases · Text C", word: "a rear extension", ru: "задняя пристройка", en: "\u201Cconnect... to a rear extension clad in charred timber\u201D" },
+  { cat: "Phrases · Text C", word: "sun-loving / shade-tolerant plants", ru: "светолюбивые / теневыносливые растения", en: "\u201Csun-loving plants sit near the top... shade-tolerant species lower down\u201D" },
+  { cat: "Phrases · Text C", word: "charcoal-coloured plaster", ru: "штукатурка цвета древесного угля", en: "\u201Ca kitchen finished in charcoal-coloured plaster and metal\u201D" },
+  { cat: "Phrases · Text C", word: "a large glazed skylight", ru: "большой остеклённый световой фонарь", en: "\u201Ccapped by a large glazed skylight\u201D" },
+
+  // Spatial & Volume Language
+  { cat: "Spatial & Volume", word: "double-height (space)", ru: "помещение двойной высоты", en: "A room or void that rises through two storeys, with no floor at the upper level." },
+  { cat: "Spatial & Volume", word: "void", ru: "пустота (открытый объём)", en: "An open, empty vertical space that connects two or more floors." },
+  { cat: "Spatial & Volume", word: "footprint", ru: "площадь застройки", en: "The total ground area a building covers." },
+  { cat: "Spatial & Volume", word: "glazing", ru: "остекление", en: "Glass used in windows, doors, or walls." },
+  { cat: "Spatial & Volume", word: "column(s)", ru: "колонна(ы)", en: "A vertical structural support." },
+  { cat: "Spatial & Volume", word: "punctuate", ru: "ритмично прорезать (проёмами)", en: "To break up a surface with regular openings or features." },
+  { cat: "Spatial & Volume", word: "transition", ru: "переход", en: "The shift from one type of space, or atmosphere, to another." },
+  { cat: "Spatial & Volume", word: "skylight", ru: "световой фонарь", en: "A window set into a roof to bring light from above." },
+
+  // Bonus Vocabulary
+  { cat: "Bonus", word: "mezzanine", ru: "антресоль", en: "A partial upper floor set within a taller room, overlooking the space below." },
+  { cat: "Bonus", word: "atrium", ru: "атриум", en: "A large, often multi-storey, top-lit open space at the centre of a building." },
+  { cat: "Bonus", word: "threshold", ru: "порог, точка перехода", en: "The point of transition between one space and another." },
+  { cat: "Bonus", word: "circulation", ru: "пути движения", en: "The routes people use to move through a building." },
+  { cat: "Bonus", word: "sightline", ru: "линия обзора", en: "An uninterrupted line of view through a space." },
+  { cat: "Bonus", word: "courtyard", ru: "внутренний двор", en: "An open-air space enclosed by a building on some or all sides." },
+  { cat: "Bonus", word: "cantilever", ru: "консоль", en: "A structural element that projects horizontally, supported at only one end." },
+  { cat: "Bonus", word: "span", ru: "пролёт", en: "The horizontal distance a structural element crosses unsupported." },
+  { cat: "Bonus", word: "massing", ru: "объёмно-пространственное решение", en: "The overall three-dimensional bulk or shape of a building." },
+  { cat: "Bonus", word: "envelope", ru: "оболочка здания", en: "The outer shell of a building — walls and roof — separating inside from outside." },
+];
+
+const categories = ["All", ...new Set(deck.map(c => c.cat))];
+let activeCategory = "All";
+let activeDeck = [...deck];
+let index = 0;
+let flipped = false;
+
+function shortLabel(cat) {
+  return cat;
+}
+
+function initFilters() {
+  const el = document.getElementById('filters');
+  el.innerHTML = categories.map(c => `<button class="filter-btn${c === 'All' ? ' active' : ''}" data-cat="${c}">${shortLabel(c)}</button>`).join('');
+  el.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => setCategory(btn.dataset.cat));
+  });
+}
+
+function setCategory(cat) {
+  activeCategory = cat;
+  activeDeck = cat === "All" ? [...deck] : deck.filter(c => c.cat === cat);
+  index = 0;
+  flipped = false;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
+  render();
+}
+
+function render() {
+  const card = activeDeck[index];
+  document.getElementById('cat-tag').textContent = card.cat;
+  document.getElementById('word-text').textContent = card.word;
+  document.getElementById('russian-text').textContent = card.ru;
+  document.getElementById('explanation-text').textContent = card.en;
+  document.getElementById('progress-current').textContent = index + 1;
+  document.getElementById('progress-total').textContent = activeDeck.length;
+  document.getElementById('progress-category').textContent = activeCategory;
+  document.getElementById('card').classList.toggle('flipped', flipped);
+}
+
+function flip() {
+  flipped = !flipped;
+  document.getElementById('card').classList.toggle('flipped', flipped);
+}
+
+function next() {
+  index = (index + 1) % activeDeck.length;
+  flipped = false;
+  render();
+}
+
+function prev() {
+  index = (index - 1 + activeDeck.length) % activeDeck.length;
+  flipped = false;
+  render();
+}
+
+function shuffle() {
+  for (let i = activeDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [activeDeck[i], activeDeck[j]] = [activeDeck[j], activeDeck[i]];
+  }
+  index = 0;
+  flipped = false;
+  render();
+}
+
+document.getElementById('card-scene').addEventListener('click', flip);
+document.getElementById('next-btn').addEventListener('click', next);
+document.getElementById('prev-btn').addEventListener('click', prev);
+document.getElementById('shuffle-btn').addEventListener('click', shuffle);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') next();
+  else if (e.key === 'ArrowLeft') prev();
+  else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); }
+});
+
+initFilters();
+render();
+</script>
+
+</body>
+</html>
