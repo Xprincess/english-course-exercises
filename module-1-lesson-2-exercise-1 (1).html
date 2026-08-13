@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 1 · Lesson 2 · Exercise 1 — Gap Fill (Multiple Choice)</title>
+<style>
+  :root {
+    --charcoal: #36454F;
+    --charcoal-dark: #222B31;
+    --paper: #FFFFFF;
+    --offwhite: #F2F2F2;
+    --clay: #C1502E;
+    --sage: #8FA998;
+    --muted: #6B7280;
+    --line: #D9D9D5;
+    --correct: #4B7A5A;
+    --correct-bg: #EAF3EC;
+    --incorrect: #B23A3A;
+    --incorrect-bg: #FBEAEA;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Calibri, Arial, sans-serif;
+    background: var(--offwhite);
+    color: #1A1A1A;
+  }
+  header {
+    background: var(--charcoal-dark);
+    color: var(--paper);
+    padding: 2.2rem 1.5rem 1.8rem;
+    text-align: left;
+  }
+  header .kicker {
+    color: var(--clay);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  header h1 {
+    font-family: Cambria, Georgia, serif;
+    font-size: 1.9rem;
+    margin: 0 0 0.35rem;
+  }
+  header p {
+    color: var(--sage);
+    font-style: italic;
+    margin: 0;
+    font-size: 0.98rem;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+  }
+  .item {
+    background: var(--paper);
+    border-left: 4px solid var(--clay);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin-bottom: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .item .num {
+    color: var(--clay);
+    font-weight: 700;
+    font-family: Cambria, Georgia, serif;
+    margin-right: 0.3rem;
+  }
+  .item .sentence {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #1A1A1A;
+    margin-bottom: 0.7rem;
+  }
+  .options {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .option-btn {
+    font-family: inherit;
+    font-size: 0.92rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--line);
+    background: var(--offwhite);
+    color: var(--charcoal);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .option-btn:hover { border-color: var(--clay); }
+  .option-btn.selected {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--paper);
+  }
+  .item.correct { background: var(--correct-bg); border-left-color: var(--correct); }
+  .item.correct .option-btn.selected {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: var(--paper);
+  }
+  .item.incorrect { background: var(--incorrect-bg); border-left-color: var(--incorrect); }
+  .item.incorrect .option-btn.selected {
+    background: var(--incorrect);
+    border-color: var(--incorrect);
+    color: var(--paper);
+  }
+  .item.incorrect .option-btn.correct-answer {
+    border-color: var(--correct);
+    color: var(--correct);
+    font-weight: 700;
+  }
+
+  .controls {
+    position: sticky;
+    bottom: 0;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 900px;
+    margin: 1.5rem auto 0;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .score {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    font-family: Cambria, Georgia, serif;
+  }
+  .score span { color: var(--clay); }
+  button.action-btn {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.65rem 1.4rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.08s ease;
+  }
+  button.action-btn:active { transform: scale(0.97); }
+  .btn-check { background: var(--clay); color: var(--paper); }
+  .btn-check:hover { background: #A9432A; }
+  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .btn-reset:hover { border-color: var(--muted); color: var(--charcoal); }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Module 1 · Lesson 2 · Exercise 1</div>
+  <h1>Gap Fill — Multiple Choice</h1>
+  <p>Click a word — you'll see straight away if it's correct.</p>
+</header>
+
+<main>
+  <div id="exercise-list"></div>
+
+  <div class="controls">
+    <div class="score">Score: <span id="score-display">0 / 20</span></div>
+    <button class="action-btn btn-reset" onclick="resetExercise()">Reset</button>
+  </div>
+</main>
+
+<footer>Module 1 · Lesson 2 — Spatial Language &amp; Describing Volumes</footer>
+
+<script>
+const items = [
+  { s: "The living room is a ______ space, rising through both floors of the house.", options: ["mezzanine", "double-height", "atrium"], answer: "double-height" },
+  { s: "A ______ separates the two wings of the house while still connecting them.", options: ["void", "threshold", "courtyard"], answer: "void" },
+  { s: "Extending sideways rather than upwards keeps the ______ small.", options: ["envelope", "footprint", "massing"], answer: "footprint" },
+  { s: "Floor-to-ceiling ______ lets the garden spill into the kitchen.", options: ["circulation", "sightline", "glazing"], answer: "glazing" },
+  { s: "Slim steel ______ hold up the roof without blocking the view.", options: ["columns", "cantilevers", "spans"], answer: "columns" },
+  { s: "Regular openings ______ the brick fa\u00e7ade at intervals.", options: ["circulate", "punctuate", "transition"], answer: "punctuate" },
+  { s: "A change in floor material marks the ______ from hallway to kitchen.", options: ["threshold", "transition", "sightline"], answer: "transition" },
+  { s: "A ______ above the stairwell pulls light down into the basement.", options: ["void", "mezzanine", "skylight"], answer: "skylight" },
+  { s: "A small ______ was added above the workshop for extra storage.", options: ["mezzanine", "void", "courtyard"], answer: "mezzanine" },
+  { s: "Visitors are greeted by a glass-roofed ______ at the entrance.", options: ["mezzanine", "atrium", "courtyard"], answer: "atrium" },
+  { s: "Stepping over the ______, you move from the noisy street into total quiet.", options: ["span", "threshold", "sightline"], answer: "threshold" },
+  { s: "Good ______ means guests never have to walk back through the kitchen.", options: ["massing", "circulation", "envelope"], answer: "circulation" },
+  { s: "Removing the wall opened up a ______ straight through to the garden.", options: ["threshold", "sightline", "span"], answer: "sightline" },
+  { s: "Bedrooms wrap around a quiet ______ planted with olive trees.", options: ["atrium", "void", "courtyard"], answer: "courtyard" },
+  { s: "The upper floor sits on a ______, jutting out over the garden below.", options: ["span", "cantilever", "threshold"], answer: "cantilever" },
+  { s: "A steel beam allows the roof to ______ the full width of the room.", options: ["punctuate", "span", "cantilever"], answer: "span" },
+  { s: "The architect broke up the building's ______ into smaller, stepped volumes.", options: ["massing", "envelope", "footprint"], answer: "massing" },
+  { s: "Insulating the ______ properly cuts heating costs significantly.", options: ["massing", "envelope", "footprint"], answer: "envelope" },
+  { s: "Rather than building up, they added a ______ across the side garden.", options: ["rear extension", "lateral extension", "cantilever"], answer: "lateral extension" },
+  { s: "The ______ pushed the kitchen two metres into the garden.", options: ["rear extension", "lateral extension", "cantilever"], answer: "rear extension" },
+];
+
+let selections = new Array(items.length).fill(null);
+
+function init() {
+  const list = document.getElementById('exercise-list');
+  list.innerHTML = items.map((item, i) => `
+    <div class="item" id="item-${i}">
+      <div class="sentence"><span class="num">${i + 1}.</span>${item.s}</div>
+      <div class="options">
+        ${item.options.map(opt => `<button class="option-btn" data-item="${i}" data-value="${opt}" onclick="select(${i}, '${opt.replace(/'/g, "\\'")}')">${opt}</button>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+let answered = new Array(items.length).fill(false); // false | 'correct' | 'wrong'
+
+function select(i, value) {
+  const el = document.getElementById(`item-${i}`);
+  const item = items[i];
+
+  // once answered correctly, lock the question
+  if (answered[i] === 'correct') return;
+
+  const isCorrect = value === item.answer;
+
+  el.classList.remove('correct', 'incorrect');
+  document.querySelectorAll(`.option-btn[data-item="${i}"]`).forEach(btn => {
+    btn.classList.remove('selected', 'correct-answer');
+  });
+
+  const clickedBtn = document.querySelector(`.option-btn[data-item="${i}"][data-value="${CSS.escape(value)}"]`);
+  clickedBtn.classList.add('selected');
+
+  if (isCorrect) {
+    el.classList.add('correct');
+    answered[i] = 'correct';
+  } else {
+    el.classList.add('incorrect');
+    document.querySelectorAll(`.option-btn[data-item="${i}"]`).forEach(btn => {
+      if (btn.dataset.value === item.answer) btn.classList.add('correct-answer');
+    });
+    answered[i] = 'wrong';
+  }
+
+  updateScore();
+}
+
+function updateScore() {
+  const correctCount = answered.filter(a => a === 'correct').length;
+  document.getElementById('score-display').textContent = `${correctCount} / ${items.length}`;
+}
+
+function resetExercise() {
+  answered = new Array(items.length).fill(false);
+  init();
+  document.getElementById('score-display').textContent = `0 / ${items.length}`;
+}
+
+init();
+</script>
+
+</body>
+</html>
